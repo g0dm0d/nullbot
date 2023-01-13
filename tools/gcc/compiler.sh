@@ -1,5 +1,5 @@
-echo $1 > file.c
+#!/bin/bash
 
-gcc -nostartfiles -g file.c -o file
+gcc -o file file.c
 
 ./file

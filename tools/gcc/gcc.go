@@ -1,6 +1,8 @@
 package gcc
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"nullbot/tools"
 	"os/exec"
@@ -17,7 +19,6 @@ func DiscordGcc(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	}
 	if option, ok := optionMap["code"]; ok {
 		test := i.Interaction.ApplicationCommandData().Resolved.Attachments[option.Value.(string)]
-		log.Println(tools.GetFile(test.URL))
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
@@ -35,10 +36,13 @@ func DiscordGcc(s *discordgo.Session, i *discordgo.InteractionCreate) {
 }
 
 func runGcc(code string) string {
-	result, err := exec.Command("docker", "run", "-i", "--rm", "--name", "script-gcc", "gcc-compile", "sh", "compiler.sh", "|", "echo", code).Output()
+	ioutil.WriteFile("/home/godmod/Documents/nullbot/tmp/file.c", []byte(code), 0644)
+	result, err := exec.Command("docker", "run", "-i", "--rm", "gcc-compile",
+		"/bin/bash", "-c", fmt.Sprintf("echo \"%s\" > file.c && sh compiler.sh", strings.Replace(code, "\"", "\\\"", -1))).CombinedOutput()
+	log.Println(string(result))
 	if err != nil {
 		log.Println(err)
-		return err.Error()
+		return strings.Join([]string{"err:", err.Error(), "\nmessage:", string(result)}, "")
 	}
 	return string(result)
 }

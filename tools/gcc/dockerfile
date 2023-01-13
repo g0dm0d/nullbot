@@ -1,7 +1,5 @@
 FROM gcc
 
-COPY ./compiler.sh .
+COPY ./compiler.sh compiler.sh
 
-RUN chmod +x ./compiler.sh
-
-CMD [ "file" ]
+RUN chmod +x /compiler.sh

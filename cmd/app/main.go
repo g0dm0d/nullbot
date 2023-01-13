@@ -144,13 +144,3 @@ func main() {
 
 	log.Println("Gracefully shutting down.")
 }
-
-// func main() {
-// 	test := "print(\"hello world!\")"
-// 	a, err := exec.Command("sh", "/home/godmod/Documents/nullbot/tools/python/runner.sh", test).Output()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		fmt.Println("err")
-// 	}
-// 	fmt.Println(string(a))
-// }
