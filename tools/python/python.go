@@ -34,7 +34,7 @@ func DiscordPython(s *discordgo.Session, i *discordgo.InteractionCreate) {
 }
 
 func runPython(code string) string {
-	result, err := exec.Command("sh", "/home/godmod/Documents/nullbot/tools/python/runner.sh", code).CombinedOutput()
+	result, err := exec.Command("sh", "./tools/python/runner.sh", code).CombinedOutput()
 	if err != nil {
 		log.Println(err)
 		return strings.Join([]string{"err:", err.Error(), "\nmessage:", string(result)}, "")

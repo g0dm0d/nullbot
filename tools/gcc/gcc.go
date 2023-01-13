@@ -37,8 +37,9 @@ func DiscordGcc(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 func runGcc(code string) string {
 	ioutil.WriteFile("/home/godmod/Documents/nullbot/tmp/file.c", []byte(code), 0644)
-	result, err := exec.Command("docker", "run", "-i", "--rm", "gcc-compile",
-		"/bin/bash", "-c", fmt.Sprintf("echo \"%s\" > file.c && sh compiler.sh", strings.Replace(code, "\"", "\\\"", -1))).CombinedOutput()
+	result, err := exec.Command("docker", "run", "-i", "--name", "script-gcc", "--rm", "gcc-compile",
+		"/bin/bash", "-c", fmt.Sprintf("echo \"%s\" > file.c && sh compiler.sh",
+			strings.Replace(code, "\"", "\\\"", -1))).CombinedOutput()
 	log.Println(string(result))
 	if err != nil {
 		log.Println(err)
