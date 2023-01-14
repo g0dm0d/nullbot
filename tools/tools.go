@@ -1,9 +1,11 @@
 package tools
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func GetFile(file string) string {
@@ -23,4 +25,12 @@ func GetFile(file string) string {
 		log.Fatal(err)
 	}
 	return string(bodyText)
+}
+
+func FixSymbol(code string) string {
+	return strings.Replace(code, "\"", "\\\"", -1)
+}
+
+func GenerateCommand(code, filetype string) string {
+	return fmt.Sprintf("echo \"%s\" > file.%s && sh compiler.sh", code, filetype)
 }

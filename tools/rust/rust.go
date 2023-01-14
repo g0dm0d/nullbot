@@ -34,10 +34,11 @@ func DiscordRust(s *discordgo.Session, i *discordgo.InteractionCreate) {
 }
 
 func runRust(code string) string {
-	result, err := exec.Command("docker", "run", "-i", "--rm", "--name", "script-rust", "rust-compile", "sh", "compiler.sh", code).CombinedOutput()
+	result, err := exec.Command("docker", "run", "-i", "--name", "script-rust", "--rm", "rust-compile",
+		"/bin/bash", "-c", tools.GenerateCommand(tools.FixSymbol(code), "rs")).CombinedOutput()
 	if err != nil {
 		log.Println(err)
-		return strings.Join([]string{"err:", err.Error(), "message:", string(result)}, "")
+		return strings.Join([]string{"err:", err.Error(), "\nmessage:", string(result)}, "")
 	}
 	return string(result)
 }

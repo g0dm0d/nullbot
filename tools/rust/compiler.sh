@@ -1,5 +1,3 @@
-echo $1 > file.rs
-
+#!/bin/bash
 rustc file.rs
-
 ./file
