@@ -4,6 +4,8 @@ import (
 	"log"
 	"nullbot/config/run"
 	"nullbot/plugins/gcc"
+	"nullbot/plugins/python"
+	"nullbot/plugins/rust"
 )
 
 func main() {
@@ -18,6 +20,8 @@ func main() {
 	}
 
 	bot.RegisterPlugin(gcc.RegisterPlugin())
+	bot.RegisterPlugin(python.RegisterPlugin())
+	bot.RegisterPlugin(rust.RegisterPlugin())
 
 	bot.Run()
 }

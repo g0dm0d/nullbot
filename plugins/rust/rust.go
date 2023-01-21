@@ -2,7 +2,7 @@ package rust
 
 import (
 	"log"
-	"nullbot/tools"
+	"nullbot/plugins"
 	"os/exec"
 	"strings"
 
@@ -25,7 +25,7 @@ func DiscordRust(s *discordgo.Session, i *discordgo.InteractionCreate) {
 					{
 						ContentType: "text/plain",
 						Name:        "output.txt",
-						Reader:      strings.NewReader(runRust(tools.GetFile(test.URL))),
+						Reader:      strings.NewReader(runRust(plugins.GetFile(test.URL))),
 					},
 				},
 			},
@@ -35,7 +35,7 @@ func DiscordRust(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 func runRust(code string) string {
 	result, err := exec.Command("docker", "run", "-i", "--name", "script-rust", "--rm", "rust-compile",
-		"/bin/bash", "-c", tools.GenerateCommand(tools.FixSymbol(code), "rs")).CombinedOutput()
+		"/bin/bash", "-c", plugins.GenerateCommand(plugins.FixSymbol(code), "rs")).CombinedOutput()
 	if err != nil {
 		log.Println(err)
 		return strings.Join([]string{"err:", err.Error(), "\nmessage:", string(result)}, "")

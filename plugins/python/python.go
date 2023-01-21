@@ -2,7 +2,7 @@ package python
 
 import (
 	"log"
-	"nullbot/tools"
+	"nullbot/plugins"
 	"os/exec"
 	"strings"
 
@@ -25,7 +25,7 @@ func DiscordPython(s *discordgo.Session, i *discordgo.InteractionCreate) {
 					{
 						ContentType: "text/plain",
 						Name:        "output.txt",
-						Reader:      strings.NewReader(runPython(tools.GetFile(test.URL))),
+						Reader:      strings.NewReader(runPython(plugins.GetFile(test.URL))),
 					},
 				},
 			},
