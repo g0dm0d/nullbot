@@ -2,7 +2,7 @@ package gcc
 
 import (
 	"log"
-	"nullbot/tools"
+	"nullbot/plugins"
 	"os/exec"
 	"strings"
 
@@ -25,7 +25,7 @@ func DiscordGcc(s *discordgo.Session, i *discordgo.InteractionCreate) {
 					{
 						ContentType: "text/plain",
 						Name:        "output.txt",
-						Reader:      strings.NewReader(runGcc(tools.GetFile(test.URL))),
+						Reader:      strings.NewReader(runGcc(plugins.GetFile(test.URL))),
 					},
 				},
 			},
@@ -35,7 +35,7 @@ func DiscordGcc(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 func runGcc(code string) string {
 	result, err := exec.Command("docker", "run", "-i", "--name", "script-gcc", "--rm", "gcc-compile",
-		"/bin/bash", "-c", tools.GenerateCommand(tools.FixSymbol(code), "c")).CombinedOutput()
+		"/bin/bash", "-c", plugins.GenerateCommand(plugins.FixSymbol(code), "c")).CombinedOutput()
 	if err != nil {
 		log.Println(err)
 		return strings.Join([]string{"err:", err.Error(), "\nmessage:", string(result)}, "")
