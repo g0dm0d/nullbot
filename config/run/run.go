@@ -15,13 +15,17 @@ type Config struct {
 }
 
 type Bot struct {
-	session *discordgo.Session
-	plugins []Plugin
+	session         *discordgo.Session
+	plugins         []Plugin
+	commandHandlers map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate)
 }
 
 func NewBot(token string) (*Bot, error) {
 	s, err := discordgo.New("Bot " + token)
-	return &Bot{session: s}, err
+	return &Bot{
+		session:         s,
+		commandHandlers: make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate)),
+	}, err
 }
 
 func Init() (Config, error) {
@@ -68,6 +72,9 @@ type Command struct {
 
 func (b *Bot) RegisterPlugin(plugin *Plugin) {
 	b.plugins = append(b.plugins, *plugin)
+	for _, c := range plugin.Commands {
+		b.commandHandlers[c.Command.Name] = c.Func
+	}
 	log.Printf("Register plugin: %s", plugin.Name)
 }
 
@@ -78,16 +85,16 @@ func (b *Bot) LoadCommands() {
 			if err != nil {
 				log.Panicf("Cannot create '%v' command: %v", c.Command.Name, err)
 			} else {
-				log.Printf("Register command: %s", p.Name)
+				log.Printf("Register command: %s", c.Command.Name)
 			}
 		}
 	}
 }
 
 func (b *Bot) LoadHandlers() {
-	for _, p := range b.plugins {
-		for _, c := range p.Commands {
-			b.session.AddHandler(c.Func)
+	b.session.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if h, ok := b.commandHandlers[i.ApplicationCommandData().Name]; ok {
+			h(s, i)
 		}
-	}
+	})
 }

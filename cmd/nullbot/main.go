@@ -3,9 +3,7 @@ package main
 import (
 	"log"
 	"nullbot/config/run"
-	"nullbot/plugins/gcc"
-	"nullbot/plugins/python"
-	"nullbot/plugins/rust"
+	"nullbot/plugins/compiler"
 )
 
 func main() {
@@ -19,9 +17,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	bot.RegisterPlugin(gcc.RegisterPlugin())
-	bot.RegisterPlugin(python.RegisterPlugin())
-	bot.RegisterPlugin(rust.RegisterPlugin())
+	bot.RegisterPlugin(compiler.RegisterPlugin())
 
 	bot.Run()
 }
