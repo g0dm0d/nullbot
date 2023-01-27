@@ -4,6 +4,7 @@ import (
 	"log"
 	"nullbot/config/run"
 	"nullbot/plugins/compiler"
+	"nullbot/plugins/ping"
 )
 
 func main() {
@@ -18,6 +19,7 @@ func main() {
 	}
 
 	bot.RegisterPlugin(compiler.RegisterPlugin())
+	bot.RegisterPlugin(ping.RegisterPlugin())
 
 	bot.Run()
 }
